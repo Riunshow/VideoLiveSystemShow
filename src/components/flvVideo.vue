@@ -1,6 +1,8 @@
 <template>
-  <video class="flv-player"
-    controls></video>
+  <div>
+    <video id="videoElement" class="flv-player"></video>
+    <button @click="playVideo">play</button>
+  </div>
 </template>
 
 <script>
@@ -8,86 +10,45 @@ import flvjs from 'flv.js'
 export default {
   name: 'flv-player',
   props: {
-    mediaDataSource: {
-      type: Object,
-      required: true
-    },
-    config: {
-      type: Object,
-      required: false
-    },
-    autoplay: {
-      type: Boolean,
-      required: false
-    },
-    poster: {
-      type: String,
+    roomID: {
+      type: Number,
       required: false
     },
   },
   data() {
     return {
-      isSupported: true,
-      flvPlayer: {},
-      state: {
-        load: false
-      }
     }
   },
   // computed: {},
   // watch: {},
   // beforeCreate: function () {},
-  created: function () {
-    this.isSupported = flvjs.isSupported()
-    this.flvPlayer = flvjs.createPlayer(this.mediaDataSource, this.config)
+  created() {
+
   },
   // beforeMount: function () {},
-  mounted: function () {
-    this.flvPlayer.attachMediaElement(this.$el)
-    if (this.autoplay) {
-      this.play()
+  mounted() {
+    if (flvjs.isSupported()) {
+      var videoElement = document.getElementById('videoElement');
+      var flvPlayer = flvjs.createPlayer({
+        type: 'flv',
+        url: `http://localhost:9090/api/live/${this.roomID}.flv`
+      });
+      flvPlayer.attachMediaElement(videoElement);
+      flvPlayer.load();
+      flvPlayer.play();
     }
   },
-  // beforeUpdate: function () {},
-  // updated: function () {},
-  // beforeDestroy: function () {},
-  // destroyed: function () {},
   methods: {
-    constructor: function (mediaDataSource, config) {
-      this.flvPlayer.constructor(mediaDataSource, config)
-    },
-    destroy: function () {
-      this.flvPlayer.destroy()
-    },
-    on: function (event, listener) {
-      this.flvPlayer.on(event, listener)
-    },
-    off: function (event, listener) {
-      this.flvPlayer.off(event, listener)
-    },
-    load: function () {
-      this.flvPlayer.load()
-      this.state.load = true
-      if (this.autoplay) {
-        this.play()
-      }
-    },
-    unload: function () {
-      this.flvPlayer.unload()
-      this.state.load = false
-    },
-    play: function () {
-      this.state.load || this.load()
-      this.flvPlayer.play()
-    },
-    pause: function () {
-      this.flvPlayer.pause()
-    },
-    refresh: function () {
-      this.pause()
-      this.unload()
-      this.play()
-    },
+    playVideo() {
+      var videoElement = document.getElementById('videoElement');
+      var flvPlayer = flvjs.createPlayer({
+        type: 'flv',
+        url: `http://localhost:9090/live/${this.roomID}.flv`
+      });
+      flvPlayer.attachMediaElement(videoElement);
+      flvPlayer.load();
+      flvPlayer.play();
+    }
   }
 }
 </script>

@@ -1,40 +1,41 @@
 <template>
   <div>
-    <button @click="play">play</button>
-    <button @click="refresh">refresh</button>
-    <button @click="pause">pause</button>
-    <flv-player ref="fp" :mediaDataSource='{
-      type: "flv",
-      url:"http://127.0.0.1:7001/hks/http.flv",
-      isLive:true,
-      }'
-      :config='{
-      // enableStashBuffer:false,
-      }' />
+    <button @click="applicationRoom">申请直播间</button>
+    <flv-player :roomID="roomID" />
   </div>
 </template>
 <script>
-import flvPlayer from '@/components/flvVideo'
- export default {
-		name: 'video',
-		components: {
-			flvPlayer
-		},
-    data() {
-      return {}
-    },
-    methods: {
-      play(){
-        this.$refs.fp.play()
-      },
-      refresh(){
-        this.$refs.fp.refresh()
-      },
-      pause(){
-        this.$refs.fp.pause()
-      }
+import pathname from '@/config/pathName'
+import FlvPlayer from '@/components/FlvVideo'
+
+export default {
+  name: 'liveVideo',
+  components: {
+    FlvPlayer
+  },
+  data() {
+    return {
+      roomID: 0
     }
+  },
+  async created () {
+    const data = await this.$request(pathname.LIVELIST, 'get')
+    this.roomID = data[0].roomID
+    // this.mediaDataParams.url = `http://localhost:9090/live/${data.roomID}.flv`
+  },
+  mounted(){
+  },
+  methods: {
+    // 申请直播间
+    async applicationRoom() {
+      const params = {
+        title: 'test room', 
+        cover: ''
+      }
+      const result = await this.$request(pathname.APPLICATION, 'post', params)
+    },
   }
+}
 </script>
 <style>
   .flv-player {
