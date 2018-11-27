@@ -1,14 +1,29 @@
 <template>
 	<div class="header">
-		<div v-if="!userInfo">
+		<!-- logo -->
+		<div class="logo">
+			<img src="@/assets/logo.png" alt="logo">
+		</div>
+
+		<!-- userinfo -->
+		<div class="userInfo" v-if="!userInfo">
 			<el-button type="text" @click="dialogRegist = true">注册</el-button>
 			<el-button type="text" @click="dialogLogin = true">登录</el-button>
 		</div>
 
-		<div v-else>
-			头像 <img :src="userInfo.avatar">
-			昵称 <span>{{ userInfo.nickname }}</span>
-			<el-button type="text" @click="logout">退出</el-button>
+		<div class="userInfo" v-else>
+			<img class="userAvatar" :src="userInfo.avatar">
+			<el-dropdown>
+				<span class="el-dropdown-link">
+					<span class="userName">{{ userInfo.nickname }}</span>
+					<i class="el-icon-arrow-down el-icon--right"></i>
+				</span>
+				<el-dropdown-menu slot="dropdown">
+					<el-dropdown-item><el-button type="text" @click="logout">退出</el-button></el-dropdown-item>
+					<el-dropdown-item><el-button type="text" @click="logout">退出</el-button></el-dropdown-item>
+					<el-dropdown-item><el-button type="text" @click="logout">退出</el-button></el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
 		</div>
 
 		<!-- 登录弹出框 -->
@@ -74,7 +89,7 @@ export default {
 	},
 	methods: {
 		/*
-		 zbt@qq.com
+		 1@1.com
 		 123
 		 */
 		async loginMethod() {
@@ -88,13 +103,13 @@ export default {
 			const result = await this.$request(pathname.LOGIN, 'post', params)
 			if (!result.error) {
 				this.dialogLogin = false
-				// this.$message({
-        //   message: '登录成功',
-        //   type: 'success'
-				// });
+				this.$notify({
+          title: '登录成功',
+          message: `欢迎您, ${result.data.user.role === 1 ? '主播' : '用户' } ${result.data.user.nickname}`,
+          type: 'success'
+        });
 				sessionStorage.setItem('userInfo', JSON.stringify(result.data.user))
 				this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-				console.log(this.userInfo)
 			}
 		},
 		async registMethod() {
@@ -109,8 +124,9 @@ export default {
 			const data = await this.$request(pathname.REGISTER, 'post', params)
 			if (!data.error) {
 				this.dialogRegist = false
-				this.$message({
-          message: '注册成功',
+				this.$notify({
+          title: '注册成功',
+          message: '',
           type: 'success'
         });
 			}
@@ -118,10 +134,11 @@ export default {
 		async logout() {
 			const data = await this.$request(pathname.LOGOUT, 'get')
 			if (!data.error) {
-				// this.$message({
-        //   message: '退出成功',
-        //   type: 'success'
-				// });
+				this.$notify({
+          title: '退出成功',
+          message: '',
+          type: 'success'
+        });
 				sessionStorage.removeItem('userInfo')
 				this.userInfo = null
 			}
@@ -136,5 +153,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.header {
+	padding: 0 50px 0 50px;
+	color: #333;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
+	.logo {
+		img {
+			height: 30px;
+			width: 30px;
+		}
+	}
+
+	.userInfo {
+		display: flex;
+		align-items: center;
+		height: 64px;
+
+		.el-dropdown {
+			color: #333 !important;
+		}
+
+		.userAvatar{
+			height: 30px;
+			width: 30px;
+			border-radius: 15px;
+			margin-right: 15px;
+		}
+
+		.userName {
+			cursor: pointer;
+		}
+	}
+}
 </style>

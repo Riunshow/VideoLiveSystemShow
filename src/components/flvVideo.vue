@@ -27,7 +27,7 @@ export default {
   },
   // beforeMount: function () {},
   mounted() {
-    if (flvjs.isSupported()) {
+    if (this.roomID && flvjs.isSupported()) {
       var videoElement = document.getElementById('videoElement');
       var flvPlayer = flvjs.createPlayer({
         type: 'flv',
@@ -40,14 +40,16 @@ export default {
   },
   methods: {
     playVideo() {
-      var videoElement = document.getElementById('videoElement');
-      var flvPlayer = flvjs.createPlayer({
-        type: 'flv',
-        url: `http://localhost:9090/live/${this.roomID}.flv`
-      });
-      flvPlayer.attachMediaElement(videoElement);
-      flvPlayer.load();
-      flvPlayer.play();
+      if (this.roomID && flvjs.isSupported()) {
+        var videoElement = document.getElementById('videoElement');
+        var flvPlayer = flvjs.createPlayer({
+          type: 'flv',
+          url: `http://localhost:9090/live/${this.roomID}.flv`
+        });
+        flvPlayer.attachMediaElement(videoElement);
+        flvPlayer.load();
+        flvPlayer.play();
+      }
     }
   }
 }

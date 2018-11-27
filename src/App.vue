@@ -1,17 +1,22 @@
 <template>
   <div id="app">
     <el-container>
-      <!-- header -->
-      <el-header>
-        <Header />
-      </el-header>
+      <!-- aside -->
+      <el-aside>
+        <Aside />
+      </el-aside>
+
       <el-container>
-        <!-- aside -->
-        <el-aside width="200px">Aside</el-aside>
+        <!-- header -->
+        <el-header>
+          <Header />
+        </el-header>
+
         <!-- main -->
         <el-main>
           <router-view/>
         </el-main>
+
       </el-container>
     </el-container>
   </div>
@@ -19,10 +24,13 @@
 
 <script>
 import Header from '@/components/Header'
+import Aside from '@/components/Aside'
+
 export default {
   name: 'App',
   components: {
-    Header
+    Header,
+    Aside
   }
 }
 </script>
@@ -37,21 +45,21 @@ html, body, #app {
     width: 100%;
 
     .el-header {
-      background-color: #B3C0D1;
-      color: #333;
-      text-align: center;
-      line-height: 60px;
+      background-color: #f2f2f3;
+      height: 64px !important;
     }
     
     .el-aside {
-      background-color: #D3DCE6;
-      color: #333;
-      text-align: center;
-      line-height: 200px;
+      background-color: #191b2e;
+      color: #fff;
+      // text-align: center;
+      // line-height: 200px;
+      width: auto !important;
+      max-width: 200px;
     }
     
     .el-main {
-      background-color: #E9EEF3;
+      background-color: #f2f2f3;
       color: #333;
       text-align: center;
       line-height: 160px;
