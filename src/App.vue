@@ -39,21 +39,20 @@ export default {
 html, body, #app {
   height: 100%;
   width: 100%;
-
+  overflow: hidden;
+  
   .el-container {
     height: 100%;
     width: 100%;
 
     .el-header {
-      background-color: #f2f2f3;
-      height: 64px !important;
+      background-color: #fff;
+      height: 84px !important;
     }
     
     .el-aside {
-      background-color: #191b2e;
+      background-color: #2c2c2c;
       color: #fff;
-      // text-align: center;
-      // line-height: 200px;
       width: auto !important;
       max-width: 200px;
     }
