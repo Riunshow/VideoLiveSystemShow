@@ -31,18 +31,23 @@ const mutations = {
 
 const actions = {
 	async actionFn ({ commit, state }, params) {},
-	async getSmsCode({ commit, state }) {
-		commit('commitChangeMsg')
+	async getSmsCode({ commit, state }, params) {
+		const result = await request(pathname.SMSCODE, 'post', params)
 
-		let timer = setInterval(() => {
-			if (state.countTime > 0) {
-				commit('commitChangeMsg')
-			}else {
-				clearInterval(timer)
-				commit('resetState')
-			}
-		}, 1000)
+		if (result.success) {
+			commit('commitChangeMsg')
 
+			let timer = setInterval(() => {
+				if (state.countTime > 0) {
+					commit('commitChangeMsg')
+				}else {
+					clearInterval(timer)
+					commit('resetState')
+				}
+			}, 1000)
+		}
+		
+		return result
 	},
 }
 

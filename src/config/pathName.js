@@ -3,5 +3,6 @@ export default {
 	REGISTER: '/api/user/register',
 	LOGOUT: '/api/user/logout',
 	APPLICATION: '/api/live/application',
-	LIVELIST: '/api/live'
+	LIVELIST: '/api/live',
+	SMSCODE: '/api/user/smscode'
 }

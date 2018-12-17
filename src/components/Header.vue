@@ -48,18 +48,18 @@
 				<i slot="prepend" class="el-icon-mobile-phone"></i>
 			</el-input>
 			<div class="getSmscode">
-				<el-input class="inputSmscode" placeholder="请输入验证码" v-model="regist.phone">
+				<el-input class="inputSmscode" placeholder="请输入验证码" v-model="regist.code">
 					<i slot="prepend" class="el-icon-message"></i>
 				</el-input>
 				<el-button size="mini" round @click="getSmsCodeFn" :disabled="canClickGetSmscode">{{ msg }}</el-button>
 			</div>
-			<el-input placeholder="请输入昵称" v-model="regist.phone">
+			<el-input placeholder="请输入昵称" v-model="regist.nickname">
 				<i slot="prepend" class="el-icon-edit"></i>
 			</el-input>
-			<el-input placeholder="请输入密码" v-model="regist.phone">
+			<el-input placeholder="请输入密码" v-model="regist.pwd">
 				<i slot="prepend" class="el-icon-star-off"></i>
 			</el-input>
-			<el-input placeholder="请再次输入密码" v-model="regist.phone">
+			<el-input placeholder="请再次输入密码" v-model="regist.againpwd">
 				<i slot="prepend" class="el-icon-star-off"></i>
 			</el-input>
 			<div slot="footer" class="dialog-footer">
@@ -81,7 +81,7 @@ export default {
 	data () {
 		return {
 			dialogLogin: false,
-			dialogRegist: true,
+			dialogRegist: false,
 			formLabelWidth: '120px',
 			login: {
 				phone: '',
@@ -89,6 +89,8 @@ export default {
 			},
 			regist: {
 				phone: '',
+				code: '',
+				nickname: '',
 				pwd: '',
 				againpwd: '',
 			},
@@ -117,7 +119,7 @@ export default {
 			const { phone, pwd } = this.login
 			this.dialogLogin = true
 			const params = {
-				username: phone,
+				useraccount: phone,
 				password: pwd,
 				rememberMe: false
 			}
@@ -134,25 +136,46 @@ export default {
 			}
 		},
 		async getSmsCodeFn() {
-			this.getSmsCode()
+			const { phone } = this.regist
+			if (phone) {
+				const params = {
+					phoneNum: phone
+				}
+				const result = await this.getSmsCode(params)
+				if (result.success) {
+					this.$message(result.msg)
+				}else {
+					this.$message.error(result.msg)
+				}
+			}else {
+				this.$message.error('电话号码不能为空')		
+			}
 		},
 		async registMethod() {
-			const { phone, pwd } = this.regist
-			this.dialogRegist = true
-			const params = {
-				username: phone,
-				password: pwd,
-				nickname: 'nickname',
-				avatar: 'https://avatars0.githubusercontent.com/u/19502268?s=40&v=4'
-			}
-			const data = await this.$request(pathname.REGISTER, 'post', params)
-			if (!data.error) {
-				this.dialogRegist = false
-				this.$notify({
-          title: '注册成功',
-          message: '',
-          type: 'success'
-        });
+			const { phone, code, nickname, pwd, againpwd } = this.regist
+
+			if (pwd !== againpwd) {
+				this.$message.error('两次密码不一致')
+			}else {
+				this.dialogRegist = true
+				const params = {
+					useraccount: phone,
+					smscode: code,
+					password: pwd,
+					nickname,
+					avatar: 'https://avatars0.githubusercontent.com/u/19502268?s=40&v=4'
+				}
+				const data = await this.$request(pathname.REGISTER, 'post', params)
+				if (!data.error) {
+					this.dialogRegist = false
+					this.$notify({
+						title: '注册成功',
+						message: '',
+						type: 'success'
+					});
+				}else {
+					this.$message.error('注册失败，请重试。')
+				}
 			}
 		},
 		async logout() {
