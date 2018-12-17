@@ -27,10 +27,10 @@
 		</div>
 
 		<!-- 登录弹出框 -->
-		<el-dialog title="登录" :visible.sync="dialogLogin">
+		<el-dialog title="登录" :visible.sync="dialogLogin" width="400px">
 			<el-form :model="login">
 				<el-form-item label="用户名(邮箱)" :label-width="formLabelWidth">
-					<el-input v-model="login.email" autocomplete="off"></el-input>
+					<el-input v-model="login.phone" autocomplete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="密码" :label-width="formLabelWidth">
 					<el-input v-model="login.pwd" autocomplete="off"></el-input>					
@@ -43,15 +43,25 @@
 		</el-dialog>
 
 		<!-- 注册弹出框 -->
-		<el-dialog title="注册" :visible.sync="dialogRegist">
-			<el-form :model="regist">
-				<el-form-item label="用户名(邮箱)" :label-width="formLabelWidth">
-					<el-input v-model="regist.email" autocomplete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="密码" :label-width="formLabelWidth">
-					<el-input v-model="regist.pwd" autocomplete="off"></el-input>					
-				</el-form-item>
-			</el-form>
+		<el-dialog title="注册" :visible.sync="dialogRegist" width="400px">
+			<el-input placeholder="请输入手机号码" v-model="regist.phone">
+				<i slot="prepend" class="el-icon-mobile-phone"></i>
+			</el-input>
+			<div class="getSmscode">
+				<el-input class="inputSmscode" placeholder="请输入验证码" v-model="regist.phone">
+					<i slot="prepend" class="el-icon-message"></i>
+				</el-input>
+				<el-button size="mini" round @click="getSmsCodeFn" :disabled="canClickGetSmscode">{{ msg }}</el-button>
+			</div>
+			<el-input placeholder="请输入昵称" v-model="regist.phone">
+				<i slot="prepend" class="el-icon-edit"></i>
+			</el-input>
+			<el-input placeholder="请输入密码" v-model="regist.phone">
+				<i slot="prepend" class="el-icon-star-off"></i>
+			</el-input>
+			<el-input placeholder="请再次输入密码" v-model="regist.phone">
+				<i slot="prepend" class="el-icon-star-off"></i>
+			</el-input>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="cancel">取 消</el-button>
 				<el-button type="primary" @click="registMethod">确 定</el-button>
@@ -62,6 +72,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+
 import pathname from '@/config/pathName'
 
 export default {
@@ -69,15 +81,16 @@ export default {
 	data () {
 		return {
 			dialogLogin: false,
-			dialogRegist: false,
+			dialogRegist: true,
 			formLabelWidth: '120px',
 			login: {
-				email: '',
+				phone: '',
 				pwd: ''
 			},
 			regist: {
-				email: '',
-				pwd: ''
+				phone: '',
+				pwd: '',
+				againpwd: '',
 			},
 			userInfo: null
 		};
@@ -87,16 +100,24 @@ export default {
 			this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
 		}
 	},
+	mounted() {
+		
+	},
+	computed: {
+		...mapState('user', ['canClickGetSmscode']),
+		...mapGetters('user', ['msg'])
+	},
 	methods: {
+		...mapActions('user', ['getSmsCode']),
 		/*
 		 1@1.com
 		 123
 		 */
 		async loginMethod() {
-			const { email, pwd } = this.login
+			const { phone, pwd } = this.login
 			this.dialogLogin = true
 			const params = {
-				username: email,
+				username: phone,
 				password: pwd,
 				rememberMe: false
 			}
@@ -112,11 +133,14 @@ export default {
 				this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
 			}
 		},
+		async getSmsCodeFn() {
+			this.getSmsCode()
+		},
 		async registMethod() {
-			const { email, pwd } = this.regist
+			const { phone, pwd } = this.regist
 			this.dialogRegist = true
 			const params = {
-				username: email,
+				username: phone,
 				password: pwd,
 				nickname: 'nickname',
 				avatar: 'https://avatars0.githubusercontent.com/u/19502268?s=40&v=4'
@@ -159,7 +183,7 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-
+	
 	.logo {
 		img {
 			height: 30px;
@@ -186,6 +210,23 @@ export default {
 		.userName {
 			cursor: pointer;
 		}
+	}
+	.el-dialog {
+
+		.getSmscode {
+
+			.inputSmscode {
+				width: 255px;
+			}
+		}
+	}
+
+	.dialog-footer {
+		text-align: center;
+	}
+	.el-input {
+    // width: 180px;
+		margin-bottom: 15px;
 	}
 }
 </style>
