@@ -10,7 +10,8 @@
       :boxHeight="300"
       >
     </baberrage>
-    <input type="text" :v-model="inputSM">
+    <input type="text" v-model="inputSM">
+
     <button @click="addToList">send</button>
   </div>
 </template>
@@ -57,7 +58,7 @@ export default {
       this.barrageList.push({
         id: ++this.currentId,
         avatar: "@/assets/logo.png",
-        msg: this.msg,
+        msg: this.inputSM,
         // barrageStyle: "normal",
         time: 5,
         type: 0,

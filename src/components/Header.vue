@@ -27,15 +27,13 @@
 		</div>
 
 		<!-- 登录弹出框 -->
-		<el-dialog title="登录" :visible.sync="dialogLogin" width="400px">
-			<el-form :model="login">
-				<el-form-item label="用户名(邮箱)" :label-width="formLabelWidth">
-					<el-input v-model="login.phone" autocomplete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="密码" :label-width="formLabelWidth">
-					<el-input v-model="login.pwd" autocomplete="off"></el-input>					
-				</el-form-item>
-			</el-form>
+		<el-dialog title="登录" :visible.sync="dialogLogin" width="400px" :show-close="false" :close-on-click-modal="false">
+			<el-input placeholder="请输入手机号码" v-model="login.phone">
+				<i slot="prepend" class="el-icon-mobile-phone"></i>
+			</el-input>
+			<el-input placeholder="请输入密码" v-model="login.pwd" :type="showPwd ? 'text' : 'password'">
+				<i slot="prepend" @click="showPwd = !showPwd" :class="showPwd ? 'el-icon-star-off' : 'el-icon-star-on'"></i>
+			</el-input>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="cancel">取 消</el-button>
 				<el-button type="primary" @click="loginMethod">确 定</el-button>
@@ -43,7 +41,7 @@
 		</el-dialog>
 
 		<!-- 注册弹出框 -->
-		<el-dialog title="注册" :visible.sync="dialogRegist" width="400px">
+		<el-dialog title="注册" :visible.sync="dialogRegist" width="400px" :show-close="false" :close-on-click-modal="false">
 			<el-input placeholder="请输入手机号码" v-model="regist.phone">
 				<i slot="prepend" class="el-icon-mobile-phone"></i>
 			</el-input>
@@ -56,11 +54,11 @@
 			<el-input placeholder="请输入昵称" v-model="regist.nickname">
 				<i slot="prepend" class="el-icon-edit"></i>
 			</el-input>
-			<el-input placeholder="请输入密码" v-model="regist.pwd">
-				<i slot="prepend" class="el-icon-star-off"></i>
+			<el-input placeholder="请输入密码" v-model="regist.pwd" :type="showPwd ? 'text' : 'password'">
+				<i slot="prepend" @click="showPwd = !showPwd" :class="showPwd ? 'el-icon-star-off' : 'el-icon-star-on'"></i>
 			</el-input>
-			<el-input placeholder="请再次输入密码" v-model="regist.againpwd">
-				<i slot="prepend" class="el-icon-star-off"></i>
+			<el-input placeholder="请再次输入密码" v-model="regist.againpwd" :type="showPwd ? 'text' : 'password'">
+				<i slot="prepend" @click="showPwd = !showPwd" :class="showPwd ? 'el-icon-star-off' : 'el-icon-star-on'"></i>
 			</el-input>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="cancel">取 消</el-button>
@@ -73,7 +71,7 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-
+import { checkPhone } from '@/utils/common.js'
 import pathname from '@/config/pathName'
 
 export default {
@@ -94,6 +92,7 @@ export default {
 				pwd: '',
 				againpwd: '',
 			},
+			showPwd: false,
 			userInfo: null
 		};
 	},
@@ -111,50 +110,55 @@ export default {
 	},
 	methods: {
 		...mapActions('user', ['getSmsCode']),
-		/*
-		 1@1.com
-		 123
-		 */
 		async loginMethod() {
 			const { phone, pwd } = this.login
 			this.dialogLogin = true
 			const params = {
 				useraccount: phone,
-				password: pwd,
-				rememberMe: false
+				password: pwd
 			}
 			const result = await this.$request(pathname.LOGIN, 'post', params)
-			if (!result.error) {
+			if (result.success) {
 				this.dialogLogin = false
 				this.$notify({
           title: '登录成功',
           message: `欢迎您, ${result.data.user.role === 1 ? '主播' : '用户' } ${result.data.user.nickname}`,
           type: 'success'
-        });
+        })
 				sessionStorage.setItem('userInfo', JSON.stringify(result.data.user))
 				this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+			}else {
+				this.$message.error(result.msg)
 			}
 		},
+		// 发送短信验证码
 		async getSmsCodeFn() {
 			const { phone } = this.regist
 			if (phone) {
-				const params = {
-					phoneNum: phone
-				}
-				const result = await this.getSmsCode(params)
-				if (result.success) {
-					this.$message(result.msg)
+				const isPhoneNum = checkPhone(phone)
+				if (isPhoneNum) {
+					const params = {
+						phoneNum: phone
+					}
+					const result = await this.getSmsCode(params)
+					if (result.success) {
+						this.$message(result.msg)
+					}else {
+						this.$message.error(result.msg)
+					}
 				}else {
-					this.$message.error(result.msg)
+					this.$message.error('请输入正确的电话号码')
 				}
 			}else {
-				this.$message.error('电话号码不能为空')		
+				this.$message.error('电话号码不能为空')	
 			}
 		},
+		// 注册
 		async registMethod() {
 			const { phone, code, nickname, pwd, againpwd } = this.regist
-
-			if (pwd !== againpwd) {
+			if (!phone && !code && !nickname && !pwd && !againpwd) {
+				this.$message.error('输入框不能为空')
+			}else if (pwd !== againpwd) {
 				this.$message.error('两次密码不一致')
 			}else {
 				this.dialogRegist = true
@@ -166,23 +170,23 @@ export default {
 					avatar: 'https://avatars0.githubusercontent.com/u/19502268?s=40&v=4'
 				}
 				const data = await this.$request(pathname.REGISTER, 'post', params)
-				if (!data.error) {
-					this.dialogRegist = false
+				if (data.success) {
+					this.cancel()
 					this.$notify({
 						title: '注册成功',
 						message: '',
 						type: 'success'
 					});
 				}else {
-					this.$message.error('注册失败，请重试。')
+					this.$message.error(data.msg)
 				}
 			}
 		},
 		async logout() {
-			const data = await this.$request(pathname.LOGOUT, 'get')
-			if (!data.error) {
+			const result = await this.$request(pathname.LOGOUT, 'get')
+			if (result.success) {
 				this.$notify({
-          title: '退出成功',
+          title: result.msg,
           message: '',
           type: 'success'
         });
@@ -193,7 +197,19 @@ export default {
 		cancel() {
 			this.dialogLogin = false
 			this.dialogRegist = false
+			this.showPwd = false
 
+			this.regist = {
+				phone: '',
+				code: '',
+				nickname: '',
+				pwd: '',
+				againpwd: '',
+			}
+			this.login = {
+				phone: '',
+				pwd: ''
+			}
 		}
 	}
 }

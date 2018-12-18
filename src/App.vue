@@ -47,7 +47,7 @@ html, body, #app {
 
     .el-header {
       background-color: #fff;
-      height: 84px !important;
+      // height: 84px !important;
     }
     
     .el-aside {
