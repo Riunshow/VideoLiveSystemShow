@@ -99,7 +99,7 @@
 			<el-input placeholder="请输入手机号码" v-model="login.phone">
 				<i slot="prepend" class="el-icon-mobile-phone"></i>
 			</el-input>
-			<el-input placeholder="请输入密码" v-model="login.pwd" :type="showPwd ? 'text' : 'password'">
+			<el-input placeholder="请输入密码" v-model="login.pwd" :type="showPwd ? 'text' : 'password'" @keyup.enter.native="loginMethod">
 				<i slot="prepend" @click="showPwd = !showPwd" :class="showPwd ? 'el-icon-star-off' : 'el-icon-star-on'"></i>
 			</el-input>
 			<div slot="footer" class="dialog-footer">
@@ -125,7 +125,7 @@
 			<el-input placeholder="请输入密码" v-model="regist.pwd" :type="showPwd ? 'text' : 'password'">
 				<i slot="prepend" @click="showPwd = !showPwd" :class="showPwd ? 'el-icon-star-off' : 'el-icon-star-on'"></i>
 			</el-input>
-			<el-input placeholder="请再次输入密码" @keyup.enter="registMethod" v-model="regist.againpwd" :type="showPwd ? 'text' : 'password'">
+			<el-input placeholder="请再次输入密码" @keyup.enter.native="registMethod" v-model="regist.againpwd" :type="showPwd ? 'text' : 'password'">
 				<i slot="prepend" @click="showPwd = !showPwd" :class="showPwd ? 'el-icon-star-off' : 'el-icon-star-on'"></i>
 			</el-input>
 			<div slot="footer" class="dialog-footer">
