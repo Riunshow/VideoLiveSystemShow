@@ -9,10 +9,10 @@ const state = {
 
 const getters = {
 	msg(state){
-		return state.msg;
+		return state.msg
 	},
 	count(state){
-		return state.count;
+		return state.count
 	}
 }
 

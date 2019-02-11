@@ -180,6 +180,7 @@ export default {
 	},
 	methods: {
 		...mapActions('user', ['getSmsCode']),
+		// 登录
 		async loginMethod() {
 			const { phone, pwd } = this.login
 			this.dialogLogin = true
