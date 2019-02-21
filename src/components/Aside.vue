@@ -33,35 +33,21 @@
 				active-text-color="#f60"
 				:collapse-transition="false"
 			>
-				<el-submenu index="1">
-					<template slot="title">
-						<i class="el-icon-location"></i>
-						<span slot="title">导航一</span>
-					</template>
-					<el-menu-item-group>
-						<span slot="title">分组一</span>
-						<el-menu-item index="1-1">选项1</el-menu-item>
-						<el-menu-item index="1-2">选项2</el-menu-item>
-					</el-menu-item-group>
-					<el-menu-item-group title="分组2">
-						<el-menu-item index="1-3">选项3</el-menu-item>
-					</el-menu-item-group>
-					<el-submenu index="1-4">
-						<span slot="title">选项4</span>
-						<el-menu-item index="1-4-1">选项1</el-menu-item>
-					</el-submenu>
-				</el-submenu>
-				<el-menu-item index="2">
+				<el-menu-item index="1">
 					<i class="el-icon-menu"></i>
-					<span slot="title">导航二</span>
+					<span slot="title">全部直播</span>
 				</el-menu-item>
-				<el-menu-item index="3" disabled>
+				<el-menu-item index="2">
 					<i class="el-icon-document"></i>
-					<span slot="title">导航三</span>
+					<span slot="title">全部分类</span>
+				</el-menu-item>
+				<el-menu-item index="3">
+					<i class="el-icon-setting"></i>
+					<span slot="title">人气排行</span>
 				</el-menu-item>
 				<el-menu-item index="4">
 					<i class="el-icon-setting"></i>
-					<span slot="title">导航四</span>
+					<span slot="title">主播招募</span>
 				</el-menu-item>
 			</el-menu>
 		</div>
@@ -84,14 +70,28 @@
 		</div>
 
 		<div class="userHasLogin" v-else>
-			<div class="userInfo" v-if="!isCollapse">
-				<img class="userAvatar" :src="userInfo.avatar">
-				<span class="userName">{{ userInfo.nickname }}</span>
-				<!-- <el-button type="text" @click="logout">退出</el-button> -->
-			</div>
-			<div class="userInfoCol" v-else>
-				<img class="userAvatar" :src="userInfo.avatar">
-			</div>
+			<el-popover
+				placement="right"
+				width="400"
+				trigger="hover">
+				<div class="userMoreInfo">
+					<div>
+
+					</div>
+				</div>
+				<!-- <el-button slot="reference">click 激活</el-button> -->
+				<div slot="reference">
+					<div class="userInfo" v-if="!isCollapse">
+						<img class="userAvatar" :src="userInfo.avatar">
+						<span class="userName">{{ userInfo.nickname }}</span>
+						<el-tag>{{userInfo.roleName}}</el-tag>
+						<el-button class="logout" type="text" @click="logout">退出登录</el-button>
+					</div>
+					<div class="userInfoCol" v-else>
+						<img class="userAvatar" :src="userInfo.avatar">
+					</div>
+				</div>
+			</el-popover>
 		</div>
 
 		<!-- 登录弹出框 -->
@@ -172,6 +172,19 @@ export default {
 	created() {
 		if (JSON.parse(sessionStorage.getItem('userInfo'))) {
 			this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+			switch (this.userInfo.role) {
+				case 3:
+					this.userInfo.roleName = '管理员'
+					break;
+				case 2:
+					this.userInfo.roleName = '主播'
+					break;
+				case 1:
+					this.userInfo.roleName = '普通用户'
+					break;
+				default:
+					break;
+			}
 		}
 	},
 	computed: {
@@ -253,6 +266,7 @@ export default {
 				}
 			}
 		},
+		// 退出
 		async logout() {
 			const result = await this.$request(pathname.LOGOUT, 'get')
 			if (result.success) {
@@ -282,8 +296,13 @@ export default {
 				pwd: ''
 			}
 		},
+		// 侧边栏收缩隐藏
 		changeShow() {
 			this.isCollapse = !this.isCollapse
+		},
+		// 获取侧边栏分类
+		async getCategoryList() {
+
 		},
 		handleOpen(key, keyPath) {
 			console.log(key, keyPath);
@@ -390,6 +409,13 @@ export default {
 
 		.el-menu {
 			border: none;
+
+			.el-menu-item {
+				color: #f2f2f3d2 !important;
+			}
+			.el-menu-item:hover {
+				color: #fff !important;
+			}
 		}
 
 		.el-menu-vertical-demo:not(.el-menu--collapse) {
@@ -464,18 +490,29 @@ export default {
 	}
 
 	.userHasLogin {
+
 		.userInfo {
+			height: 150px;
 			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-around;
+			margin-top: 15px;
 
 			.userAvatar{
-				height: 30px;
-				width: 30px;
-				border-radius: 15px;
-				margin-right: 15px;
+				height: 50px;
+				width: 50px;
+				border-radius: 25px;
 			}
 
 			.userName {
 				cursor: pointer;
+				height: 30px;
+				line-height: 30px;
+			}
+
+			.logout {
+
 			}
 		}
 
