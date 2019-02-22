@@ -72,11 +72,13 @@
 		<div class="userHasLogin" v-else>
 			<el-popover
 				placement="right"
-				width="400"
+				width="250"
 				trigger="hover">
 				<div class="userMoreInfo">
-					<div>
-
+					<div class="userMoreOptions">
+						<div>
+							余额 {{userInfo.balance}}
+						</div>
 					</div>
 				</div>
 				<!-- <el-button slot="reference">click 激活</el-button> -->
@@ -170,22 +172,7 @@ export default {
 		};
 	},
 	created() {
-		if (JSON.parse(sessionStorage.getItem('userInfo'))) {
-			this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-			switch (this.userInfo.role) {
-				case 3:
-					this.userInfo.roleName = '管理员'
-					break;
-				case 2:
-					this.userInfo.roleName = '主播'
-					break;
-				case 1:
-					this.userInfo.roleName = '普通用户'
-					break;
-				default:
-					break;
-			}
-		}
+		this.changeRoleName()
 	},
 	computed: {
 		...mapState('user', ['canClickGetSmscode']),
@@ -193,6 +180,25 @@ export default {
 	},
 	methods: {
 		...mapActions('user', ['getSmsCode']),
+		// change role name
+		changeRoleName() {
+			if (JSON.parse(sessionStorage.getItem('userInfo'))) {
+				this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+				switch (this.userInfo.role) {
+					case 3:
+						this.userInfo.roleName = '管理员'
+						break;
+					case 2:
+						this.userInfo.roleName = '主播'
+						break;
+					case 1:
+						this.userInfo.roleName = '普通用户'
+						break;
+					default:
+						break;
+				}
+			}
+		},
 		// 登录
 		async loginMethod() {
 			const { phone, pwd } = this.login
@@ -211,6 +217,7 @@ export default {
         })
 				sessionStorage.setItem('userInfo', JSON.stringify(result.data.user))
 				this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+				this.changeRoleName()
 			}else {
 				this.$message.error(result.msg)
 			}

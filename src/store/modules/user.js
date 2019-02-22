@@ -26,11 +26,13 @@ const mutations = {
 		state.msg = '获取验证码'
 		state.countTime = 60
 		state.canClickGetSmscode = false
-	}
+	},
 }
 
 const actions = {
+	// basic
 	async actionFn ({ commit, state }, params) {},
+	// 获取短信验证码
 	async getSmsCode({ commit, state }, params) {
 		const result = await request(pathname.SMSCODE, 'post', params)
 
@@ -49,6 +51,7 @@ const actions = {
 		
 		return result
 	},
+
 }
 
 export default {
