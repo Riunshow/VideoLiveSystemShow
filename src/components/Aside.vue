@@ -23,7 +23,7 @@
 		<div class="asideMenu">
 			<!-- 菜单 -->
 			<el-menu 
-				default-active="1-4-1"
+				:default-active="this.$route.path"
 				class="el-menu-vertical-demo" 
 				@open="handleOpen" 
 				@close="handleClose" 
@@ -32,20 +32,21 @@
 				text-color="#fff"
 				active-text-color="#f60"
 				:collapse-transition="false"
+				:router="true"
 			>
-				<el-menu-item index="1">
+				<el-menu-item index="/">
 					<i class="el-icon-menu"></i>
 					<span slot="title">全部直播</span>
 				</el-menu-item>
-				<el-menu-item index="2">
+				<el-menu-item index="/allCategory">
 					<i class="el-icon-document"></i>
 					<span slot="title">全部分类</span>
 				</el-menu-item>
-				<el-menu-item index="3">
+				<el-menu-item index="/3">
 					<i class="el-icon-setting"></i>
 					<span slot="title">人气排行</span>
 				</el-menu-item>
-				<el-menu-item index="4">
+				<el-menu-item index="/4">
 					<i class="el-icon-setting"></i>
 					<span slot="title">主播招募</span>
 				</el-menu-item>
@@ -70,30 +71,31 @@
 		</div>
 
 		<div class="userHasLogin" v-else>
-			<el-popover
-				placement="right"
-				width="250"
-				trigger="hover">
-				<div class="userMoreInfo">
-					<div class="userMoreOptions">
-						<div>
-							余额 {{userInfo.balance}}
+			<div class="userInfo" v-if="!isCollapse">
+				<el-popover
+					placement="right"
+					width="250"
+					trigger="hover">
+					<div class="userMoreInfo">
+						<div class="userMoreOptions">
+							<div>
+								身份<el-tag>{{userInfo.roleName}}</el-tag>
+							</div>
+							<span>余额 {{userInfo.balance}}</span>
+							<span>送礼记录</span>
 						</div>
 					</div>
-				</div>
-				<!-- <el-button slot="reference">click 激活</el-button> -->
-				<div slot="reference">
-					<div class="userInfo" v-if="!isCollapse">
-						<img class="userAvatar" :src="userInfo.avatar">
-						<span class="userName">{{ userInfo.nickname }}</span>
-						<el-tag>{{userInfo.roleName}}</el-tag>
-						<el-button class="logout" type="text" @click="logout">退出登录</el-button>
-					</div>
-					<div class="userInfoCol" v-else>
+
+					<div slot="reference">
 						<img class="userAvatar" :src="userInfo.avatar">
 					</div>
-				</div>
-			</el-popover>
+				</el-popover>
+				<span class="userName">{{ userInfo.nickname }}</span>
+				<el-button class="logout" type="text" @click="logout">退出登录</el-button>
+			</div>
+			<div class="userInfoCol" v-else>
+				<img class="userAvatar" :src="userInfo.avatar">
+			</div>
 		</div>
 
 		<!-- 登录弹出框 -->
@@ -171,12 +173,12 @@ export default {
 			// userinfo ----- end
 		};
 	},
-	created() {
+	async created() {
 		this.changeRoleName()
 	},
 	computed: {
 		...mapState('user', ['canClickGetSmscode']),
-		...mapGetters('user', ['msg'])
+		...mapGetters('user', ['msg']),
 	},
 	methods: {
 		...mapActions('user', ['getSmsCode']),
@@ -418,10 +420,10 @@ export default {
 			border: none;
 
 			.el-menu-item {
-				color: #f2f2f3d2 !important;
+				// color: #f2f2f3d2 !important;
 			}
 			.el-menu-item:hover {
-				color: #fff !important;
+				// color: #fff !important;
 			}
 		}
 
@@ -553,6 +555,14 @@ export default {
 	.el-input {
     // width: 180px;
 		margin-bottom: 15px;
+	}
+
+}
+
+.userMoreInfo {
+	.userMoreOptions {
+		display: flex;
+		flex-direction: column;
 	}
 
 }

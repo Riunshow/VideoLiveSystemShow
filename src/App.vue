@@ -31,6 +31,8 @@ export default {
   components: {
     Header,
     Aside
+  },
+  created () {
   }
 }
 </script>
