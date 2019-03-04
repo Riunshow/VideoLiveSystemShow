@@ -4,5 +4,8 @@ export default {
 	LOGOUT: '/api/user/logout',
 	APPLICATION: '/api/live/application',
 	LIVELIST: '/api/live',
-	SMSCODE: '/api/user/smscode'
+	SMSCODE: '/api/user/smscode',
+	GROUPLIST: '/api/admin/getLiveGroupList',
+	LIVELISTBYGROUPID: '/api/admin/getInfoByGroupId',
+	LIVEINFOBYROOMID: '/api/live/getLiveInfoByRoomId',
 }

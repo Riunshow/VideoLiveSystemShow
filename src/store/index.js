@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import createLogger from 'vuex/dist/logger'
 import user from './modules/user'
 import indexPage from './modules/indexPage'
+import live from './modules/live'
 
 const plugins = []
 
@@ -15,7 +16,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
     user,
-    indexPage
+    indexPage,
+    live
   },
   plugins
 })

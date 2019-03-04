@@ -64,9 +64,9 @@ export default {
 		}
 
 	}
-	.category-info:last-child {
-		margin-right: 0;
-	}
+	// .category-info:nth-child(3n) {
+	// 	margin-right: 0;
+	// }
 	.category-info:hover {
 		cursor: pointer;
 		background-color: #ff7b00;

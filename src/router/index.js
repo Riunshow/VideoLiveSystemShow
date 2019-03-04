@@ -3,7 +3,8 @@ import Router from 'vue-router'
 
 import HomePage from '@/pages/HomePage/HomePage'
 import AllCategory from '@/pages/AllCategory/AllCategory'
-import liveRoomByCate from '@/pages/LiveRoomByCate/LiveRoomByCate'
+import LiveRoomByCate from '@/pages/LiveRoomByCate/LiveRoomByCate'
+import LiveRoom from '@/pages/LiveRoom/LiveRoom'
 import Video from '@/pages/Video/Video'
 
 Vue.use(Router)
@@ -23,7 +24,12 @@ export default new Router({
     {
       path: '/liveRoomByCate/:cateId',
       name: 'liveRoomByCate',
-      component: liveRoomByCate
+      component: LiveRoomByCate
+    },
+    {
+      path: '/liveRoom/:roomId',
+      name: 'liveRoom',
+      component: LiveRoom
     },
     {
       path: '/video/:roomId',

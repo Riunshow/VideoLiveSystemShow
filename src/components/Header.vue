@@ -2,7 +2,7 @@
 	<div class="header">
 		<!-- logo -->
 		<div class="logo">
-			<img src="@/assets/logo.png" alt="logo">
+			<img src="../../static/image/common/logo-l.png" alt="logo">
 		</div>
 
 		<!-- userinfo -->
@@ -217,7 +217,7 @@ export default {
 
 <style lang="scss" scoped>
 .header {
-	padding: 0 50px 0 50px;
+	padding: 0 50px 0 30px;
 	color: #333;
 	display: flex;
 	align-items: center;
@@ -225,8 +225,8 @@ export default {
 	
 	.logo {
 		img {
-			height: 30px;
-			width: 30px;
+			height: 70px;
+			width: 50px;
 		}
 	}
 

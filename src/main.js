@@ -14,6 +14,9 @@ import './assets/reset.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
+import { directive } from 'namedavatar/src/vue'
+Vue.directive('avatar', directive);
+
 import request from '@/utils/request'
 
 Vue.use(ElementUI)

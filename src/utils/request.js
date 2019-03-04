@@ -10,7 +10,6 @@ export default async function request (url, method = 'GET', data = {}) {
 		
 		return response.data
 	} catch (e) {
-		this.$message.error(e.message)
 		return {
 			success: false
 		}

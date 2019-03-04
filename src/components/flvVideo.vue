@@ -1,11 +1,18 @@
 <template>
-  <div>
-    <video id="videoElement" class="flv-player"></video>
-    <button @click="playVideo">play</button>
+  <div class="flvVideo">
+    <div v-if="isLive">
+      <video id="videoElement" class="flv-player"></video>
+    </div>
+    <div v-else>
+      主播正在赶来的路上，先去看看其他的主播。
+    </div>
+    <!-- <button @click="playVideo">play</button> -->
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+
 import flvjs from 'flv.js'
 export default {
   name: 'flv-player',
@@ -17,26 +24,20 @@ export default {
   },
   data() {
     return {
+      isLive: false,
     }
   },
-  // computed: {},
-  // watch: {},
-  // beforeCreate: function () {},
-  created() {
-
+  async created() {
+    if (this.liveInfo.status == 1) {
+      this.isLive = true
+      this.playVideo()
+    }
   },
-  // beforeMount: function () {},
   mounted() {
-    if (this.roomID && flvjs.isSupported()) {
-      var videoElement = document.getElementById('videoElement');
-      var flvPlayer = flvjs.createPlayer({
-        type: 'flv',
-        url: `http://localhost:9090/api/live/${this.roomID}.flv`
-      });
-      flvPlayer.attachMediaElement(videoElement);
-      flvPlayer.load();
-      flvPlayer.play();
-    }
+    // this.playVideo()
+  },
+  computed: {
+		...mapState('live', ['liveInfo'])    
   },
   methods: {
     playVideo() {
@@ -55,5 +56,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.flvVideo {
+  width: 700px;
+  height: 400px;
+  background-color: rgba(0, 0, 0, 0.24);
+
+  .flv-player {
+    width: 700px;
+    height: 400px;
+  }
+}
 </style>
