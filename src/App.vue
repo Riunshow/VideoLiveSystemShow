@@ -48,8 +48,10 @@ html, body, #app {
     width: 100%;
 
     .el-header {
+      padding: 0;
       background-color: #fff;
-      // height: 84px !important;
+      // height: 72px !important;
+      border-bottom: 1px solid rgb(255, 102, 0);
     }
     
     .el-aside {

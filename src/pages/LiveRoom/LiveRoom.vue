@@ -4,8 +4,8 @@
 			<div class="title">
 				<!-- 头像 -->
 				<div class="avatarImg">
-					<img v-if="!liveInfo.user.avatar" v-avatar="liveInfo.user.nickname" width="150" height="150" />
-					<img v-else :src="liveInfo.user.avatar" width="150" height="150" />
+					<img v-if="!liveInfo.user.avatar" v-avatar="liveInfo.user.nickname" width="130" height="130" />
+					<img v-else :src="liveInfo.user.avatar" width="130" height="130" />
 				</div>
 				<!-- 基本信息 -->
 				<div class="titleInfo">
@@ -93,14 +93,18 @@ export default {
 		
 
 		.title {
-			height: 150px;
+			height: 130px;
 			width: 100%;
 			background-color: #fff;
-			border: 1px solid #e5e5e5;
+			// border: 1px solid #e5e5e5;
 			display: flex;
 
 			.avatarImg {
 
+			}
+			.titleInfo, .options {
+	      border-top: 1px solid rgb(255, 102, 0);
+	      border-bottom: 1px solid rgb(255, 102, 0);
 			}
 
 			.titleInfo {
@@ -165,6 +169,10 @@ export default {
 			}
 		}
 
+		.liveVideo {
+			padding: 10px 0;
+		}
+
 		.gift {
 			height: 100px;
 			width: 100%;
@@ -176,6 +184,7 @@ export default {
 		width: 300px;
 		height: 650px;
 		background-color: bisque;
+		margin-left: 10px;
 	}
 
 
