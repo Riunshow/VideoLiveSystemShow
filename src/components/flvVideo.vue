@@ -61,6 +61,8 @@ export default {
   width: 700px;
   height: 400px;
   background-color: rgba(0, 0, 0, 0.24);
+  border: 1px solid rgb(255, 102, 0);
+  border-radius: 5px;
 
   .flv-player {
     width: 700px;

@@ -8,4 +8,8 @@ export default {
 	GROUPLIST: '/api/admin/getLiveGroupList',
 	LIVELISTBYGROUPID: '/api/admin/getInfoByGroupId',
 	LIVEINFOBYROOMID: '/api/live/getLiveInfoByRoomId',
+	GETGIFTLISTBYUSERID: '/api/gift/getGiftListByUserId',
+	USERBYID: '/api/admin/userById',
+	SENDGIFT: '/api/gift/sendGIft',
+	GETRICHPEOPLE: '/api/gift/getRichPeopleByUserIdAndRoomId',
 }

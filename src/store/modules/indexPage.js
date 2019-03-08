@@ -40,7 +40,7 @@ const actions = {
   async getLiveList({ commit, state }, params) {
     commit('resetState')
     commit('commitLoadingStatus', true)
-    const result = await request(`${pathname.LIVELIST}`)
+    const result = await request(pathname.LIVELIST)
     if (result.success) {
       commit('commitLiveList', result.data)
     }
@@ -51,7 +51,7 @@ const actions = {
     commit('resetState')
     commit('commitLoadingStatus', true)
     const { live_group_id } = params
-    const result = await request(`${pathname.LIVELISTBYGROUPID}`, 'POST', {
+    const result = await request(pathname.LIVELISTBYGROUPID, 'POST', {
       live_group_id
     })
     if (result.success) {

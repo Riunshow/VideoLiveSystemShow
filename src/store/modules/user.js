@@ -5,6 +5,7 @@ const state = {
 	msg: '获取验证码',
 	countTime: 60,
 	canClickGetSmscode: false,
+	userInfo: {}
 }
 
 const getters = {
@@ -27,6 +28,9 @@ const mutations = {
 		state.countTime = 60
 		state.canClickGetSmscode = false
 	},
+	commitUserInfo(state, userInfo) {
+		state.userInfo = userInfo
+	}
 }
 
 const actions = {
@@ -51,6 +55,16 @@ const actions = {
 		
 		return result
 	},
+	// 根据用户id获取用户信息
+	async getUserById({ commit, state }, userId) {
+		const result = await request(pathname.USERBYID, 'POST', {
+			userId
+		})
+
+		if (result.success) {
+			commit('commitUserInfo', result.data)
+		}
+	}
 
 }
 
