@@ -21,6 +21,10 @@ export default {
       type: Number,
       required: false
     },
+    volume: {
+      type: Number,
+      required: false
+    }
   },
   data() {
     return {
@@ -50,6 +54,7 @@ export default {
         flvPlayer.attachMediaElement(videoElement);
         flvPlayer.load();
         flvPlayer.play();
+        flvPlayer.volume = this.volume
       }
     }
   }
@@ -60,9 +65,10 @@ export default {
 .flvVideo {
   width: 700px;
   height: 400px;
-  background-color: rgba(0, 0, 0, 0.24);
+  background-color: rgba(0, 0, 0, 0.7);
   border: 1px solid rgb(255, 102, 0);
   border-radius: 5px;
+  color: #fff;
 
   .flv-player {
     width: 700px;

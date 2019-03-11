@@ -32,8 +32,8 @@ export default {
       roomID: 0,
       inputSM: '',
       msg: 'Hello msg',
-      barrageIsShow: true,
       currentId : 0,
+      barrageIsShow: true,
       barrageLoop: false,
       barrageList: []
     }

@@ -418,13 +418,6 @@ export default {
 
 		.el-menu {
 			border: none;
-
-			.el-menu-item {
-				// color: #f2f2f3d2 !important;
-			}
-			.el-menu-item:hover {
-				// color: #fff !important;
-			}
 		}
 
 		.el-menu-vertical-demo:not(.el-menu--collapse) {
@@ -518,10 +511,6 @@ export default {
 				cursor: pointer;
 				height: 30px;
 				line-height: 30px;
-			}
-
-			.logout {
-
 			}
 		}
 

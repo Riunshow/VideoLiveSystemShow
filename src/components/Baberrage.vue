@@ -193,7 +193,7 @@ export default {
       item.width = this.strlen(item.msg) * 9 + 50
       if (item.type === 0) {
         item.left = this.boxWidthVal
-        item.top = parseInt(Math.random() * this.boxHeightVal)
+        item.top = parseInt(Math.random() / 1.3 * this.boxHeightVal)
       } else {
         item.left = (this.boxWidthVal - item.width) / 2
         if (item.position === 'top') {
@@ -231,10 +231,14 @@ export default {
 
 <style lang="scss">
 .baberrage-stage{
-  // position: absolute;
-  //   width: 100%;
-  //   height: 100%;
+  position: relative;
+  top: -400px;
+  min-height: 360px;
+  min-width: 700px;
   overflow:hidden;
+  padding: 20px 0;
+  z-index: 100;
+
   .baberrage-item {
     position: absolute;
     width:auto;
