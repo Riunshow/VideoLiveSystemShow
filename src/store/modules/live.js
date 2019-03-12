@@ -9,7 +9,9 @@ const state = {
 		liveGroup: {
 			groupName: ''
 		}
-	}
+	},
+	currentRoomId: null,
+	lastRoomId: null
 }
 
 const getters = {
@@ -19,6 +21,14 @@ const getters = {
 const mutations = {
 	commitLiveInfo(state, info) {
 		state.liveInfo = info
+	},
+	commitRoomId(state, currentRoomId) {
+		state.currentRoomId = currentRoomId
+	},
+	commitLastRoomId(state) {
+		if(state.currentRoomId) {
+			state.lastRoomId = state.currentRoomId
+		}
 	}
 }
 

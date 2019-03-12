@@ -252,8 +252,11 @@ export default {
       height:30px;
       border-radius:50px;
       overflow: hidden;
+      display: flex;
+      
       img {
         width:30px;
+        height: 30px;
       }
     }
     .baberrage-msg{

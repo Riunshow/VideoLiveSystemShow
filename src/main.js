@@ -6,6 +6,7 @@ import App from './App'
 import router from './router'
 
 import store from './store'
+Vue.prototype.$store = store
 
 // reset css
 import './assets/reset.css'

@@ -7,9 +7,11 @@ import LiveRoomByCate from '@/pages/LiveRoomByCate/LiveRoomByCate'
 import LiveRoom from '@/pages/LiveRoom/LiveRoom'
 import Video from '@/pages/Video/Video'
 
+import socketio from 'socket.io-client'
+
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
   routes: [
     {
       path: '/',
@@ -38,3 +40,6 @@ export default new Router({
     }
   ]
 })
+
+
+export default router

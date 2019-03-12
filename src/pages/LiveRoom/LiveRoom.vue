@@ -166,7 +166,9 @@ import FlvPlayer from '@/components/FlvVideo'
 import Baberrage from '@/components/Baberrage'
 import GiftComponents from './GiftComponents'
 
-import { mapState, mapActions } from 'vuex'
+import socketio from 'socket.io-client'
+
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   components: {
@@ -193,18 +195,31 @@ export default {
 			// 弹幕 侧边
 			asideBarrageList: [],
 			isOpenAsideDanmu: true,
+			// socket client
+			client: '',
+			countPeople: 1,
 		};
 	},
 	watch: {
 		async "$route"() {
+			this.commitLastRoomId()
+			this.client.emit('leave', this.lastRoomId)
 			await this.allFetch()
+			this.createSocketClient()
+			this.client.emit('join')
 		}
 	},
 	async created () {
 		await this.allFetch()
+		this.createSocketClient()
+		this.client.emit('join')
+	},
+	beforeDestroy() {
+		console.log('before')
+		this.client.emit('leave', this.currentRoomId)
 	},
 	computed: {
-		...mapState('live', ['liveInfo']),
+		...mapState('live', ['liveInfo', 'currentRoomId', 'lastRoomId']),
 		...mapState('gift', ['giftList', 'richPeopleList']),
 		...mapState('user', ['userInfo'])
 	},
@@ -212,12 +227,16 @@ export default {
 		...mapActions('live', ['getLiveInfoByRoomId']),
 		...mapActions('gift', ['getGiftListByUserId', 'sendGift', 'getRichPeople']),
 		...mapActions('user', ['getUserById']),
+		...mapMutations('live', ['commitRoomId', 'commitLastRoomId']),
 		async allFetch() {
 			this.loading = true
 			this.giftInfo = []
 			this.asideBarrageList = []
 			this.barrageList = []
 			this.inputSM = ''
+			this.client = ''
+
+			this.commitRoomId(this.$route.params.roomId)
 			await this.getLiveInfoByRoomId(this.$route.params.roomId)
 			await this.getGiftListByUserId(this.liveInfo.user_id)
 			this.giftList.map(x => {
@@ -225,6 +244,7 @@ export default {
 			})
 			await this.getUserById(JSON.parse(sessionStorage.userInfo).id)
 			await this.getRichPeople(this.liveInfo.user_id)
+
 			this.richPeopleRank = this.richPeopleList.slice(0, 3)
 			this.loading = false
 		},
@@ -246,27 +266,8 @@ export default {
 		},
     // 添加弹幕
     addToList (){
-			if (this.isOpenDanmu) {
-				this.barrageList.push({
-					id: ++this.currentDanmuId,
-					avatar: "@/assets/logo.png",
-					msg: this.inputSM,
-					barrageStyle: "normal",
-					time: 5,
-					type: 0,
-					// position: 'bottom'
-				})
-			}
-
-			if (this.isOpenAsideDanmu) {
-				this.asideBarrageList.push({
-					nickName: '乌拉拉',
-					msg: this.inputSM,
-				})
-				const domDanMu = this.$refs.danmuMove
-
-				domDanMu.scrollTo(0, domDanMu.scrollHeight + 25)
-			}
+			this.client.emit('message', this.userInfo.nickname, this.inputSM)
+			this.inputSM = ''
 		},
 		// 是否开启弹幕
 		switchBlock() {
@@ -288,6 +289,65 @@ export default {
 				this.asideBarrageList = []
 				this.inputSM = ''
 			}
+		},
+		// socket.io
+		createSocketClient() {
+			this.client = 
+				socketio('ws://127.0.0.1:7001',{
+					query:{
+						roomId: this.$route.params.roomId,
+						userId: this.userInfo.id
+					}
+				})
+
+			this.client.on('connect',() => {
+				console.log("connect sucess")
+			})
+
+			this.client.on('disconnect', () => {
+				console.log("disconnect success")
+			})
+
+      this.client.on('sys', (sysMsg) => {
+				console.log('sys: ', sysMsg)
+				this.$message.info(sysMsg)
+			})
+
+      this.client.on('msg', (info) => {
+				console.log(info)
+
+				if (this.isOpenDanmu) {
+					this.barrageList.push({
+						id: ++this.currentDanmuId,
+						avatar: this.userInfo.avatar,
+						msg: info.msg,
+						barrageStyle: "normal",
+						time: 5,
+						type: 0,
+						// position: 'bottom'
+					})
+				}
+
+				if (this.isOpenAsideDanmu) {
+					this.asideBarrageList.push({
+						nickName: info.nickname,
+						msg: info.msg,
+					})
+					const domDanMu = this.$refs.danmuMove
+
+					domDanMu.scrollTo(0, domDanMu.scrollHeight + 25)
+				}
+
+			})
+
+			this.client.on('online', (val) => {
+				console.log('online: ', val)
+				this.countPeople = val.clients.length + 1
+			})
+			
+			this.client.on('pissoff',(mess) => {
+				this.client.disconnect()
+			})
 		}
 	}
 }
