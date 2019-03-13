@@ -26,7 +26,7 @@
 						<div class="count">
 							<div class="attendance">
 								<i class="el-icon-view"></i>
-								{{ liveInfo.Attendance }}
+								{{ liveInfo.Attendance + 1 }}
 							</div>
 							<div class="hot">
 								<img class="hotImg" src="./../../assets/hot.png" alt="hot">
@@ -202,21 +202,35 @@ export default {
 	},
 	watch: {
 		async "$route"() {
+
+			console.log('watch')
+			if (this.$route.name !== 'liveRoom') {
+				return
+			}
+
 			this.commitLastRoomId()
-			this.client.emit('leave', this.lastRoomId)
+			console.log('******: ', this.lastRoomId)
+			if (this.lastRoomId) {
+				this.client.emit('leave', this.lastRoomId)
+			}
+
 			await this.allFetch()
+
 			this.createSocketClient()
 			this.client.emit('join')
 		}
 	},
 	async created () {
+		console.log('create')
 		await this.allFetch()
+
 		this.createSocketClient()
 		this.client.emit('join')
 	},
 	beforeDestroy() {
 		console.log('before')
 		this.client.emit('leave', this.currentRoomId)
+		this.client.disconnect()
 	},
 	computed: {
 		...mapState('live', ['liveInfo', 'currentRoomId', 'lastRoomId']),
@@ -234,7 +248,6 @@ export default {
 			this.asideBarrageList = []
 			this.barrageList = []
 			this.inputSM = ''
-			this.client = ''
 
 			this.commitRoomId(this.$route.params.roomId)
 			await this.getLiveInfoByRoomId(this.$route.params.roomId)

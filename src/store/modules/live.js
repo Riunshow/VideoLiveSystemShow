@@ -26,6 +26,7 @@ const mutations = {
 		state.currentRoomId = currentRoomId
 	},
 	commitLastRoomId(state) {
+		console.log('state.currentRoomId: ', state.currentRoomId)
 		if(state.currentRoomId) {
 			state.lastRoomId = state.currentRoomId
 		}

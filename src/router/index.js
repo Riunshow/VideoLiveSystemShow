@@ -31,14 +31,34 @@ const router =  new Router({
     {
       path: '/liveRoom/:roomId',
       name: 'liveRoom',
-      component: LiveRoom
+      component: LiveRoom,
+      meta: {
+        requireAuth: true
+      },
     },
     {
       path: '/video/:roomId',
       name: 'live-video',
-      component: Video
+      component: Video,
+      meta: {
+        requireAuth: true
+      },
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    if (sessionStorage.length === 0) {
+      next({
+        path: '/'
+      })
+    } else {
+      next()
+    }
+  }else {
+    next()
+  }
 })
 
 
