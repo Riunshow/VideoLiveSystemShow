@@ -48,7 +48,9 @@
 				<flv-player 
 					:roomID="parseInt(this.$route.params.roomId)" 
 					:volume="volume"
+					:isFullScreen="isFullScreen"
 					class="flvPlayerVideo"
+					ref="videoPlayer"
 				/>
 				<!-- 覆盖弹幕 -->
 				<baberrage
@@ -167,6 +169,7 @@ import Baberrage from '@/components/Baberrage'
 import GiftComponents from './GiftComponents'
 
 import socketio from 'socket.io-client'
+import screenfull from 'screenfull'
 
 import { mapState, mapActions, mapMutations } from 'vuex'
 
@@ -184,6 +187,7 @@ export default {
 			richPeopleRank: [],
 			// 播放器
 			volume: 0,
+			isFullScreen: false,
 			// dan mu cover
 			inputSM: '',
 			currentDanmuId: 0,
@@ -227,6 +231,9 @@ export default {
 		this.createSocketClient()
 		this.client.emit('join')
 	},
+	mounted() {
+		this.setFullScreenInit()
+	},
 	beforeDestroy() {
 		console.log('before')
 		this.client.emit('leave', this.currentRoomId)
@@ -241,7 +248,7 @@ export default {
 		...mapActions('live', ['getLiveInfoByRoomId']),
 		...mapActions('gift', ['getGiftListByUserId', 'sendGift', 'getRichPeople']),
 		...mapActions('user', ['getUserById']),
-		...mapMutations('live', ['commitRoomId', 'commitLastRoomId']),
+		...mapMutations('live', ['commitRoomId', 'commitLastRoomId', 'commitIsFullScreenStatus']),
 		async allFetch() {
 			this.loading = true
 			this.giftInfo = []
@@ -294,8 +301,17 @@ export default {
 		},
 		// 全屏
 		fullScreenControl() {
-			document.querySelector('.flvVideo').requestFullscreen()
+			this.isFullScreen = true
+			this.$refs.videoPlayer.fullScreenControl()
 		},
+    setFullScreenInit() {
+      if (screenfull.enabled) {
+        screenfull.on('change', () => {
+					this.isFullscreen = screenfull.isFullscreen
+					this.commitIsFullScreenStatus(screenfull.isFullscreen)
+        })
+      }
+    },
 		// 侧边弹幕是否屏蔽
 		switchAsideBlock() {
 			if (!this.isOpenAsideDanmu) {

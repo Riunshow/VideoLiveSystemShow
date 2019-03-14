@@ -6,6 +6,7 @@ import AllCategory from '@/pages/AllCategory/AllCategory'
 import LiveRoomByCate from '@/pages/LiveRoomByCate/LiveRoomByCate'
 import LiveRoom from '@/pages/LiveRoom/LiveRoom'
 import Video from '@/pages/Video/Video'
+import Wanted from '@/pages/Wanted/Wanted'
 
 import socketio from 'socket.io-client'
 
@@ -40,6 +41,14 @@ const router =  new Router({
       path: '/video/:roomId',
       name: 'live-video',
       component: Video,
+      meta: {
+        requireAuth: true
+      },
+    },
+    {
+      path: '/wanted',
+      name: 'Wantedo',
+      component: Wanted,
       meta: {
         requireAuth: true
       },

@@ -46,7 +46,7 @@
 					<i class="el-icon-setting"></i>
 					<span slot="title">人气排行</span>
 				</el-menu-item>
-				<el-menu-item index="/4">
+				<el-menu-item index="/wanted">
 					<i class="el-icon-setting"></i>
 					<span slot="title">主播招募</span>
 				</el-menu-item>

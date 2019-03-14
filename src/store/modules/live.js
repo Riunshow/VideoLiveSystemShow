@@ -11,7 +11,8 @@ const state = {
 		}
 	},
 	currentRoomId: null,
-	lastRoomId: null
+	lastRoomId: null,
+	isFullScreenStatus: false,
 }
 
 const getters = {
@@ -30,12 +31,26 @@ const mutations = {
 		if(state.currentRoomId) {
 			state.lastRoomId = state.currentRoomId
 		}
+	},
+	commitIsFullScreenStatus(state, isFullScreenStatus) {
+		state.isFullScreenStatus = isFullScreenStatus
+	},
+	commitResetLiveInfo(state) {
+		state.liveInfo = {
+			user: {
+				avatar:'',
+			},
+			liveGroup: {
+				groupName: ''
+			}
+		}
 	}
 }
 
 const actions = {
 	// 根据room id 获取信息
 	async getLiveInfoByRoomId ({ commit, state }, roomId) {
+		commit('commitResetLiveInfo')
 		const result = await request(pathname.LIVEINFOBYROOMID, 'POST', {
 			roomId
 		})
