@@ -64,8 +64,8 @@ html, body, #app {
     .el-main {
       background-color: #f2f2f3;
       color: #333;
-      text-align: center;
-      line-height: 160px;
+      // text-align: center;
+      // line-height: 160px;
     }
   }
 }

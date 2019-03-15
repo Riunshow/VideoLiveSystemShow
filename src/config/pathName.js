@@ -12,4 +12,6 @@ export default {
 	USERBYID: '/api/admin/userById',
 	SENDGIFT: '/api/gift/sendGIft',
 	GETRICHPEOPLE: '/api/gift/getRichPeopleByUserIdAndRoomId',
+	GETWANTEDSTATUSBYUSERID:'/api/wanted/getStatusByUserId',
+	SendWantedByUserId:'/api/wanted/sendWantedByUserId'
 }

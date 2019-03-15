@@ -13,6 +13,7 @@ const state = {
 	currentRoomId: null,
 	lastRoomId: null,
 	isFullScreenStatus: false,
+	wantedInfo: {}
 }
 
 const getters = {
@@ -44,6 +45,9 @@ const mutations = {
 				groupName: ''
 			}
 		}
+	},
+	commitWantedInfo(state, wantedInfo) {
+		state.wantedInfo = wantedInfo
 	}
 }
 
@@ -58,8 +62,26 @@ const actions = {
 			commit('commitLiveInfo', result.data)
 		}
 	},
-
-
+	// 获取用户申请直播间信息
+	async getWantedStatus({ commit, state }, user_id) {
+		const result = await request(pathname.GETWANTEDSTATUSBYUSERID, 'POST', {
+			user_id
+		})
+		if (result.success) {
+			commit('commitWantedInfo', result.data)
+		}
+	},
+	// 申请
+	async sendApplication({ commit, state }, options) {
+		const {user_id, realName, idCardNum} = options
+		const result = await request(pathname.SendWantedByUserId, 'POST', {
+			user_id,
+			realName,
+			idCardNum
+		})
+		return result
+	}
+	
 }
 
 export default {
