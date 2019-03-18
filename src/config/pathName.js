@@ -13,5 +13,9 @@ export default {
 	SENDGIFT: '/api/gift/sendGIft',
 	GETRICHPEOPLE: '/api/gift/getRichPeopleByUserIdAndRoomId',
 	GETWANTEDSTATUSBYUSERID:'/api/wanted/getStatusByUserId',
-	SendWantedByUserId:'/api/wanted/sendWantedByUserId'
+	SendWantedByUserId:'/api/wanted/sendWantedByUserId',
+	SendWantedByUserIdAgain:'/api/wanted/sendWantedByUserIdAgain',
+	GetDefaultGiftList:'/api/gift/getDefaultGiftList',
+	ApplicationLive:'/api/live/application',
+	GetLivListByAttendance:'/api/live/getLivListByAttendance',
 }

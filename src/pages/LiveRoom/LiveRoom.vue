@@ -241,12 +241,12 @@ export default {
 	},
 	computed: {
 		...mapState('live', ['liveInfo', 'currentRoomId', 'lastRoomId']),
-		...mapState('gift', ['giftList', 'richPeopleList']),
+		...mapState('gift', ['defaultGiftList', 'giftList', 'richPeopleList']),
 		...mapState('user', ['userInfo'])
 	},
 	methods: {
 		...mapActions('live', ['getLiveInfoByRoomId']),
-		...mapActions('gift', ['getGiftListByUserId', 'sendGift', 'getRichPeople']),
+		...mapActions('gift', ['getDeafultGift', 'getGiftListByUserId', 'sendGift', 'getRichPeople']),
 		...mapActions('user', ['getUserById']),
 		...mapMutations('live', ['commitRoomId', 'commitLastRoomId', 'commitIsFullScreenStatus']),
 		async allFetch() {
@@ -257,8 +257,10 @@ export default {
 			this.inputSM = ''
 
 			this.commitRoomId(this.$route.params.roomId)
+			await this.getDeafultGift()
 			await this.getLiveInfoByRoomId(this.$route.params.roomId)
 			await this.getGiftListByUserId(this.liveInfo.user_id)
+			this.giftInfo = this.defaultGiftList
 			this.giftList.map(x => {
 				this.giftInfo.push(...x.gifts)
 			})

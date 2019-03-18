@@ -3,6 +3,7 @@ import pathname from '../../config/pathName'
 import { quickSortRichPeople } from '../../utils/common'
 
 const state = {
+	defaultGiftList: [],
 	giftList: [],
 	richPeopleList: []
 }
@@ -15,12 +16,22 @@ const mutations = {
 	commitGiftList(state, list) {
 		state.giftList = list
 	},
+	commitDefaultGiftList(state, list) {
+		state.defaultGiftList = list
+	},
 	commitRichPeople(state, list) {
 		state.richPeopleList = list
 	},
 }
 
 const actions = {
+	//获取默认礼物
+	async getDeafultGift({ commit, state }) {
+		const result = await request(pathname.GetDefaultGiftList)
+		if (result.success) {
+			commit('commitDefaultGiftList', result.data)
+		}
+	},
 	// 根据user id 获取信息
 	async getGiftListByUserId ({ commit, state }, userId) {
 		const result = await request(pathname.GETGIFTLISTBYUSERID, 'POST', {

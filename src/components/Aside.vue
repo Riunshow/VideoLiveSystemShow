@@ -55,7 +55,7 @@
 
 		<!-- 登录注册 -->
 		<!-- userinfo -->
-		<div class="userInfo" v-if="!userInfo">
+		<div class="userInfo" v-if="!userInfo.id">
 			<div class="userinfoOpt" v-if="!isCollapse">
 				<div class="userInfo">
 					<el-button @click="dialogLogin = true" class="loginBtn activeBtn" size="mini" round>登录</el-button>
@@ -169,38 +169,17 @@ export default {
 				againpwd: '',
 			},
 			showPwd: false,
-			userInfo: null,
 			// userinfo ----- end
 		};
 	},
 	async created() {
-		this.changeRoleName()
 	},
 	computed: {
-		...mapState('user', ['canClickGetSmscode']),
+		...mapState('user', ['canClickGetSmscode', 'userInfo']),
 		...mapGetters('user', ['msg']),
 	},
 	methods: {
-		...mapActions('user', ['getSmsCode']),
-		// change role name
-		changeRoleName() {
-			if (JSON.parse(sessionStorage.getItem('userInfo'))) {
-				this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-				switch (this.userInfo.role) {
-					case 3:
-						this.userInfo.roleName = '管理员'
-						break;
-					case 2:
-						this.userInfo.roleName = '主播'
-						break;
-					case 1:
-						this.userInfo.roleName = '普通用户'
-						break;
-					default:
-						break;
-				}
-			}
-		},
+		...mapActions('user', ['getSmsCode', 'getUserById']),
 		// 登录
 		async loginMethod() {
 			const { phone, pwd } = this.login
@@ -218,11 +197,15 @@ export default {
           type: 'success'
         })
 				sessionStorage.setItem('userInfo', JSON.stringify(result.data.user))
-				this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-				this.changeRoleName()
+				await this.getUserById(JSON.parse(sessionStorage.userInfo).id)
+				await this.todayVisit()
 			}else {
 				this.$message.error(result.msg)
 			}
+		},
+		// 今日访问
+		async todayVisit() {
+			const result = await this.$request('/api/home/todayVisit', 'GET', {})
 		},
 		// 发送短信验证码
 		async getSmsCodeFn() {

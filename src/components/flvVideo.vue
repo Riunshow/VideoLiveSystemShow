@@ -129,7 +129,7 @@ export default {
   .shouldClickToPlay {
     position: relative;
     z-index: 300;
-    top: -473px;
+    top: -400px;
     width: 700px;
     height: 400px;
     background-color: rgb(0, 0, 0);

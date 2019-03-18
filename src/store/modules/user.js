@@ -29,16 +29,30 @@ const mutations = {
 		state.canClickGetSmscode = false
 	},
 	commitUserInfo(state, userInfo) {
+		switch (userInfo.role) {
+			case 1:
+				userInfo.roleName = '普通用户'
+				break;
+			case 2:
+				userInfo.roleName = '主播'
+				break;
+			case 3:
+				userInfo.roleName = '管理员'
+				break;
+			case -1:
+				userInfo.roleName = '黑名单用户'
+				break;
+			default:
+				break;
+		}
 		state.userInfo = userInfo
 	}
 }
 
 const actions = {
-	// basic
-	async actionFn ({ commit, state }, params) {},
 	// 获取短信验证码
 	async getSmsCode({ commit, state }, params) {
-		const result = await request(pathname.SMSCODE, 'post', params)
+		const result = await request(pathname.SMSCODE, 'POST', params)
 
 		if (result.success) {
 			commit('commitChangeMsg')

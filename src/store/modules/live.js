@@ -72,12 +72,33 @@ const actions = {
 		}
 	},
 	// 申请
-	async sendApplication({ commit, state }, options) {
-		const {user_id, realName, idCardNum} = options
+	async sendApplication({ commit, state }, params) {
+		const {user_id, realName, idCardNum} = params
 		const result = await request(pathname.SendWantedByUserId, 'POST', {
 			user_id,
 			realName,
 			idCardNum
+		})
+		return result
+	},
+	// 重新申请
+	async sendApplicationAgain({ commit, state }, params) {
+		const {user_id, realName, idCardNum} = params
+		const result = await request(pathname.SendWantedByUserIdAgain, 'POST', {
+			user_id,
+			realName,
+			idCardNum
+		})
+		return result
+	},
+	// 开始直播
+	async startLive({ commit, state }, params) {
+		const {	userID, title, cover, category} = params
+		const result = await request(pathname.ApplicationLive, 'POST', {
+			userID,
+			title,
+			cover,
+			category
 		})
 		return result
 	}

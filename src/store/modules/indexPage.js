@@ -27,7 +27,7 @@ const mutations = {
 }
 
 const actions = {
-  // 获取侧边栏列表
+  // 获取分类列表
   async getMenuList ({ commit, state }, params) {
     commit('commitLoadingStatus', true)
     const result = await request(`${pathname.GROUPLIST}?limit=100`)
