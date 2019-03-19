@@ -42,7 +42,7 @@
 					<i class="el-icon-document"></i>
 					<span slot="title">全部分类</span>
 				</el-menu-item>
-				<el-menu-item index="/3">
+				<el-menu-item index="/hotLiveRoom">
 					<i class="el-icon-setting"></i>
 					<span slot="title">人气排行</span>
 				</el-menu-item>
@@ -55,7 +55,7 @@
 
 		<!-- 登录注册 -->
 		<!-- userinfo -->
-		<div class="userInfo" v-if="!userInfo.id">
+		<div class="userInfo" v-if="!userInfo">
 			<div class="userinfoOpt" v-if="!isCollapse">
 				<div class="userInfo">
 					<el-button @click="dialogLogin = true" class="loginBtn activeBtn" size="mini" round>登录</el-button>
@@ -168,14 +168,16 @@ export default {
 				pwd: '',
 				againpwd: '',
 			},
+			userInfo: null,
 			showPwd: false,
 			// userinfo ----- end
 		};
 	},
 	async created() {
+		this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
 	},
 	computed: {
-		...mapState('user', ['canClickGetSmscode', 'userInfo']),
+		...mapState('user', ['canClickGetSmscode']),
 		...mapGetters('user', ['msg']),
 	},
 	methods: {
@@ -197,6 +199,7 @@ export default {
           type: 'success'
         })
 				sessionStorage.setItem('userInfo', JSON.stringify(result.data.user))
+				this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
 				await this.getUserById(JSON.parse(sessionStorage.userInfo).id)
 				await this.todayVisit()
 			}else {

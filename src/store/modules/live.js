@@ -13,7 +13,9 @@ const state = {
 	currentRoomId: null,
 	lastRoomId: null,
 	isFullScreenStatus: false,
-	wantedInfo: {}
+	wantedInfo: {
+		status: 0
+	}
 }
 
 const getters = {
@@ -47,7 +49,9 @@ const mutations = {
 		}
 	},
 	commitWantedInfo(state, wantedInfo) {
-		state.wantedInfo = wantedInfo
+		if (wantedInfo) {
+			state.wantedInfo = wantedInfo		
+		}
 	}
 }
 

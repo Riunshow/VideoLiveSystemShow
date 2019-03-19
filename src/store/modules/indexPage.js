@@ -58,7 +58,17 @@ const actions = {
       commit('commitLiveList', result.data.filter(x => x.status !== 0))
     }
     commit('commitLoadingStatus', false)
-  }
+  },
+  // 获取所有开播的直播列表  根据人气排行
+  async getLiveListByAttendance({ commit, state }, params) {
+    commit('resetState')
+    commit('commitLoadingStatus', true)
+    const result = await request(pathname.GetLivListByAttendance)
+    if (result.success) {
+      commit('commitLiveList', result.data)
+    }
+    commit('commitLoadingStatus', false)
+  },
 }
 
 export default {

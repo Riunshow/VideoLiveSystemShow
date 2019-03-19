@@ -6,6 +6,7 @@ import AllCategory from '@/pages/AllCategory/AllCategory'
 import LiveRoomByCate from '@/pages/LiveRoomByCate/LiveRoomByCate'
 import LiveRoom from '@/pages/LiveRoom/LiveRoom'
 import Video from '@/pages/Video/Video'
+import HotLiveRoom from '@/pages/HotLiveRoom/HotLiveRoom'
 import Wanted from '@/pages/Wanted/Wanted'
 
 import socketio from 'socket.io-client'
@@ -44,6 +45,11 @@ const router =  new Router({
       meta: {
         requireAuth: true
       },
+    },
+    {
+      path: '/hotLiveRoom',
+      name: 'HotLiveRoom',
+      component: HotLiveRoom,
     },
     {
       path: '/wanted',

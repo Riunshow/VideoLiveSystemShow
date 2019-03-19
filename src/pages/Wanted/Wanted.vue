@@ -61,8 +61,10 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 			async fetchData() {
 				await this.getWantedStatus(JSON.parse(sessionStorage.getItem('userInfo')).id)
 				if (this.wantedInfo) {
+					if (this.wantedInfo.status !== 0 && this.wantedInfo.status !== -1) {
+						this.isLive = true				
+					}
 					if (this.wantedInfo.status != -1) {
-						this.isLive = true
 						this.active = this.wantedInfo.status
 						this.stepStatus = 'process'
 						await this.getUserById(JSON.parse(sessionStorage.userInfo).id)

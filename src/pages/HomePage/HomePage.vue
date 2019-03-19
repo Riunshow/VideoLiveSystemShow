@@ -1,11 +1,16 @@
 <template>
 	<div class="homePage">
 		<div class="main" v-loading="loading">
-			<live-comp 
-				v-for="(item, index) in liveList"
-				:liveData="item"
-				:key="index"
-			/>
+			<div class="has" v-if="liveList.length !== 0">
+				<live-comp 
+					v-for="(item, index) in liveList"
+					:liveData="item"
+					:key="index"
+				/>
+			</div>
+			<div class="none" v-else>
+				暂时没有更多直播
+			</div>
 		</div>
 	</div>
 </template>
@@ -38,8 +43,16 @@ export default {
 	padding: 15px 30px;
 
 	.main {
-		display: flex;
-		flex-wrap: wrap;
+		.has {
+			display: flex;
+			flex-wrap: wrap;
+		}
+		
+		.none {
+			height: 200px;
+			line-height: 200px;
+			margin: 0 auto;
+		}
 	}
 }
 </style>
