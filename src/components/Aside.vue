@@ -256,6 +256,9 @@ export default {
 						message: '',
 						type: 'success'
 					});
+					this.login.phone = phone
+					this.login.pwd = pwd
+					await this.loginMethod()
 				}else {
 					this.$message.error(data.msg)
 				}

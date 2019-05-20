@@ -46,7 +46,8 @@
 			<div class="liveVideo">
 				<!-- 直播 -->
 				<flv-player 
-					:roomID="parseInt(this.$route.params.roomId)" 
+					:roomID="parseInt(this.$route.params.roomId)"
+					:token="this.liveInfo.token"
 					:volume="volume"
 					:isFullScreen="isFullScreen"
 					class="flvPlayerVideo"

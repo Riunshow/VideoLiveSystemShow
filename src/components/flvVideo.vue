@@ -30,6 +30,7 @@ export default {
       type: Number,
       required: false
     },
+    token: String
   },
   data() {
     return {
@@ -65,7 +66,7 @@ export default {
       if (this.roomID && flvjs.isSupported()) {
         this.flvPlayer = flvjs.createPlayer({
           type: 'flv',
-          url: `http://localhost:9090/live/${this.roomID}.flv`
+          url: `http://localhost:9090/live/${this.token}.flv`
         })
         this.flvPlayer.attachMediaElement(this.$refs.videoDom)
         this.flvPlayer.load()
